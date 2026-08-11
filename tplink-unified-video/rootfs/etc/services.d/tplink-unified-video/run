@@ -1,0 +1,50 @@
+#!/usr/bin/with-contenv bashio
+set -euo pipefail
+
+CONFIG=/addon_config/go2rtc.yaml
+OPTIONS=/data/options.json
+LOG_LEVEL=$(jq -r '.log_level // "info"' "$OPTIONS")
+
+echo "Starting TP-Link Unified Video Bridge"
+mkdir -p /addon_config
+
+cat > "$CONFIG" <<YAML
+api:
+  listen: ":1984"
+rtsp:
+  listen: ":8554"
+webrtc:
+  listen: ":8555"
+log:
+  level: ${LOG_LEVEL}
+streams:
+YAML
+
+COUNT=$(jq '.cameras | length' "$OPTIONS")
+if [ "$COUNT" -eq 0 ]; then
+  echo "No cameras configured yet. Add cameras in the add-on options."
+fi
+
+for i in $(seq 0 $((COUNT - 1))); do
+  RAW_NAME=$(jq -r ".cameras[$i].name" "$OPTIONS")
+  HOST=$(jq -r ".cameras[$i].host" "$OPTIONS")
+  USERNAME=$(jq -r ".cameras[$i].username // \"admin\"" "$OPTIONS")
+  PASSWORD=$(jq -r ".cameras[$i].password" "$OPTIONS")
+  if [ -z "$RAW_NAME" ] || [ "$RAW_NAME" = "null" ] || [ -z "$HOST" ] || [ "$HOST" = "null" ] || [ -z "$PASSWORD" ] || [ "$PASSWORD" = "null" ]; then
+    echo "Skipping incomplete camera entry #$i" >&2
+    continue
+  fi
+  NAME=$(printf '%s' "$RAW_NAME" | tr -c 'A-Za-z0-9_' '_' | sed 's/^_*//; s/_*$//')
+  if [ -z "$NAME" ]; then
+    echo "Skipping camera entry #$i because the sanitized name is empty" >&2
+    continue
+  fi
+  PASS_HASH=$(printf '%s' "$PASSWORD" | openssl dgst -sha256 -hex | sed 's/^.*= //' | tr '[:lower:]' '[:upper:]')
+  {
+    printf '  %s_hd: tapo://%s:%s@%s?subtype=0\n' "$NAME" "$USERNAME" "$PASS_HASH" "$HOST"
+    printf '  %s_sd: tapo://%s:%s@%s?subtype=1\n' "$NAME" "$USERNAME" "$PASS_HASH" "$HOST"
+  } >> "$CONFIG"
+  echo "Configured camera ${NAME} at ${HOST}"
+done
+
+exec /usr/local/bin/go2rtc -config "$CONFIG"

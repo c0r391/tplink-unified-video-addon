@@ -1,0 +1,53 @@
+# TP-Link Unified Video Bridge documentation
+
+## Quick start
+
+1. Install the add-on.
+2. Open Configuration.
+3. Add one entry per camera:
+
+```yaml
+log_level: info
+cameras:
+  - name: cam_192_0_2_10
+    host: 192.0.2.10
+    username: admin
+    password: your-tapo-password
+```
+
+4. Start the add-on.
+5. Open the add-on log and confirm it starts go2rtc.
+6. Add the camera in the TP-Link Unified integration.
+
+## Naming
+
+The TP-Link Unified integration currently expects:
+
+```text
+cam_<camera_ip_with_underscores>_hd
+```
+
+For camera `192.0.2.10`, use:
+
+```yaml
+name: cam_192_0_2_10
+```
+
+The add-on creates:
+
+```text
+cam_192_0_2_10_hd
+cam_192_0_2_10_sd
+```
+
+## Which password?
+
+Use `username: admin`.
+
+For many newer Tapo battery/solar cameras, the mobile app does **not** show a separate Camera Account/RTSP/ONVIF password. Use the same Tapo/TP-Link password that you entered in TP-Link Unified for that camera. This is the validated path for TC82/C410-style cameras in the Test-HA setup.
+
+If your camera/app does show a separate Camera Account, use that camera-specific password instead.
+
+## Security
+
+Passwords are read from Home Assistant add-on options and only a SHA-256 hash is written into the generated go2rtc config. The add-on does not print source URLs.

@@ -1,0 +1,42 @@
+name: TP-Link Unified Video Bridge
+version: 0.1.0
+slug: tplink_unified_video
+description: go2rtc bridge for TP-Link/Tapo camera, battery camera and doorbell live video
+author: Marcel Jung
+url: https://github.com/c0r391/tplink-unified-video-addon
+arch:
+  - amd64
+  - aarch64
+  - armv7
+  - armhf
+  - i386
+build_from:
+  amd64: ghcr.io/home-assistant/amd64-base:3.22
+  aarch64: ghcr.io/home-assistant/aarch64-base:3.22
+  armv7: ghcr.io/home-assistant/armv7-base:3.22
+  armhf: ghcr.io/home-assistant/armhf-base:3.22
+  i386: ghcr.io/home-assistant/i386-base:3.22
+startup: services
+boot: auto
+init: false
+host_network: true
+ports:
+  1984/tcp: 1984
+  8554/tcp: 8554
+  8555/tcp: 8555
+ports_description:
+  1984/tcp: go2rtc web/API
+  8554/tcp: go2rtc RTSP
+  8555/tcp: go2rtc WebRTC
+map:
+  - addon_config:rw
+options:
+  log_level: info
+  cameras: []
+schema:
+  log_level: list(trace|debug|info|notice|warning|error|fatal)
+  cameras:
+    - name: str
+      host: str
+      username: str?
+      password: password
