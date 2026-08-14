@@ -21,7 +21,8 @@ streams:
 YAML
 
 COUNT=$(jq '.cameras | length' "$OPTIONS")
-if [ "$COUNT" -eq 0 ]; then
+EOO_COUNT=$(jq '.eooeies_cameras | length' "$OPTIONS")
+if [ "$COUNT" -eq 0 ] && [ "$EOO_COUNT" -eq 0 ]; then
   echo "No cameras configured yet. Add cameras in the add-on options."
 fi
 
@@ -45,6 +46,22 @@ for i in $(seq 0 $((COUNT - 1))); do
     printf '  %s_sd: tapo://%s:%s@%s?subtype=1\n' "$NAME" "$USERNAME" "$PASS_HASH" "$HOST"
   } >> "$CONFIG"
   echo "Configured camera ${NAME} at ${HOST}"
+done
+
+for i in $(seq 0 $((EOO_COUNT - 1))); do
+  RAW_NAME=$(jq -r ".eooeies_cameras[$i].name" "$OPTIONS")
+  SOURCE=$(jq -r ".eooeies_cameras[$i].source" "$OPTIONS")
+  if [ -z "$RAW_NAME" ] || [ "$RAW_NAME" = "null" ] || [ -z "$SOURCE" ] || [ "$SOURCE" = "null" ]; then
+    echo "Skipping incomplete EOOEIES camera entry #$i" >&2
+    continue
+  fi
+  NAME=$(printf '%s' "$RAW_NAME" | tr -c 'A-Za-z0-9_' '_' | sed 's/^_*//; s/_*$//')
+  if [ -z "$NAME" ]; then
+    echo "Skipping EOOEIES camera entry #$i because the sanitized name is empty" >&2
+    continue
+  fi
+  printf '  %s: %s\n' "$NAME" "$SOURCE" >> "$CONFIG"
+  echo "Configured EOOEIES camera ${NAME}"
 done
 
 exec /usr/local/bin/go2rtc -config "$CONFIG"

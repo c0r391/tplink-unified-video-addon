@@ -1,7 +1,7 @@
 name: TP-Link Unified Video Bridge
-version: 0.1.1
+version: 0.1.2
 slug: tplink_unified_video
-description: go2rtc bridge for TP-Link/Tapo camera, battery camera and doorbell live video
+description: Shared go2rtc bridge for TP-Link/Tapo and EOOEIES camera live video
 author: Marcel Jung
 url: https://github.com/c0r391/tplink-unified-video-addon
 arch:
@@ -27,6 +27,7 @@ map:
 options:
   log_level: info
   cameras: []
+  eooeies_cameras: []
 schema:
   log_level: list(trace|debug|info|notice|warning|error|fatal)
   cameras:
@@ -34,3 +35,6 @@ schema:
       host: str
       username: str?
       password: password
+  eooeies_cameras:
+    - name: str
+      source: url

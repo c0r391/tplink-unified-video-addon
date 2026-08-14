@@ -1,10 +1,10 @@
 # TP-Link Unified Add-ons
 
-Home Assistant add-on repository for the TP-Link Unified project.
+Home Assistant add-on repository for the TP-Link Unified project and shared camera live-video bridge.
 
 ## Add-ons
 
-- **TP-Link Unified Video Bridge** — runs go2rtc with native `tapo://` streams so Tapo battery/solar cameras and doorbells can show live video/audio in Home Assistant.
+- **TP-Link Unified Video Bridge** — runs go2rtc for TP-Link/Tapo `tapo://` streams and EOOEIES raw-H264 bridge sources, so both integrations can share one Home Assistant add-on for live video/audio where supported.
 
 ## Install
 
@@ -17,11 +17,11 @@ Home Assistant add-on repository for the TP-Link Unified project.
    ```
 
 4. Install **TP-Link Unified Video Bridge**.
-5. Configure each camera.
+5. Configure each TP-Link/Tapo camera manually, or let a compatible integration configure the add-on through the Supervisor API.
 6. Start the add-on.
-7. Add the same camera in the TP-Link Unified HACS integration.
+7. Add the same camera in the TP-Link Unified HACS integration. EOOEIES cameras are configured by the EOOEIES integration when available.
 
-## Camera options
+## TP-Link/Tapo camera options
 
 Use `username: admin`. If the Tapo app does not show a separate Camera Account page, use the same Tapo/TP-Link password used in TP-Link Unified. If your camera/app exposes a separate Camera Account/RTSP/ONVIF password, use that camera-specific password instead.
 
@@ -35,6 +35,19 @@ cameras:
 ```
 
 The add-on generates the SHA-256 password hash required by go2rtc and does not print source URLs in logs.
+
+## EOOEIES camera options
+
+EOOEIES support is intended to be configured automatically by the EOOEIES Home Assistant integration. Manual options are available for diagnostics or advanced setups:
+
+```yaml
+log_level: info
+eooeies_cameras:
+  - name: eooeies_front_live
+    source: http://<home-assistant-host>/api/eooeies_cloud/live/<entry_id>/<serial>.h264
+```
+
+The add-on preserves TP-Link/Tapo `cameras` and EOOEIES `eooeies_cameras` independently so installing or updating one integration does not remove the other provider's streams.
 
 ## Support this project
 
