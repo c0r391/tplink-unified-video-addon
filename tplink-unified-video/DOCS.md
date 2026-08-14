@@ -68,7 +68,7 @@ eooeies_oben_live
 
 Use `username: admin`.
 
-For many newer Tapo battery/solar cameras, the mobile app does **not** show a separate Camera Account/RTSP/ONVIF password. Use the same Tapo/TP-Link password that you entered in TP-Link Unified for that camera. This is the validated path for TC82/C410-style cameras in the Test-HA setup.
+For many newer Tapo battery/solar cameras, the mobile app does **not** show a separate Camera Account/RTSP/ONVIF password. Use the same Tapo/TP-Link password that you entered in TP-Link Unified for that camera. This is the validated path for TC82/C410-style cameras in a non-production Home Assistant test setup.
 
 If your camera/app does show a separate Camera Account, use that camera-specific password instead.
 

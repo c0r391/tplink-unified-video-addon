@@ -2,7 +2,7 @@ name: TP-Link Unified Video Bridge
 version: 0.1.2
 slug: tplink_unified_video
 description: Shared go2rtc bridge for TP-Link/Tapo and EOOEIES camera live video
-author: Marcel Jung
+author: c0r391
 url: https://github.com/c0r391/tplink-unified-video-addon
 arch:
   - amd64

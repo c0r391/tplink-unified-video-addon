@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.3
+
+- Scrub public package metadata and documentation wording to avoid personal names and private test-system labels.
+
+
 ## 0.1.1 - Fix Home Assistant add-on build metadata
 
 - Move Home Assistant base-image build metadata into `build.yaml` so the add-on builder sets `BUILD_FROM` correctly.
