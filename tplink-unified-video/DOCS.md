@@ -2,9 +2,13 @@
 
 ## Quick start
 
-1. Install the add-on.
-2. Open Configuration.
-3. Add one entry per TP-Link/Tapo camera, or let a compatible integration configure streams automatically:
+1. Install and start the add-on.
+2. Add cameras in a compatible Home Assistant integration.
+3. Let the integration configure this add-on automatically through the Supervisor API.
+
+Manual YAML is only for diagnostics or advanced setups.
+
+## Advanced/manual TP-Link/Tapo options
 
 ```yaml
 log_level: info
@@ -15,11 +19,11 @@ cameras:
     password: your-tapo-password
 ```
 
-4. Start the add-on.
-5. Open the add-on log and confirm it starts go2rtc.
-6. Add the camera in the TP-Link Unified integration.
+After changing manual options, restart the add-on and check the log to confirm it starts go2rtc.
 
-EOOEIES cameras use the separate `eooeies_cameras` option and are normally written by the EOOEIES integration through the Supervisor API:
+## Advanced/manual EOOEIES options
+
+EOOEIES cameras use the separate `eooeies_cameras` option and are normally written by the EOOEIES integration through the Supervisor API. Manual entries are only for diagnostics:
 
 ```yaml
 log_level: info

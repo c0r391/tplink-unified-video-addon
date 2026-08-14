@@ -17,11 +17,19 @@ Home Assistant add-on repository for the TP-Link Unified project and shared came
    ```
 
 4. Install **TP-Link Unified Video Bridge**.
-5. Configure each TP-Link/Tapo camera manually, or let a compatible integration configure the add-on through the Supervisor API.
-6. Start the add-on.
-7. Add the same camera in the TP-Link Unified HACS integration. EOOEIES cameras are configured by the EOOEIES integration when available.
+5. Start the add-on.
+6. Add cameras in a compatible Home Assistant integration. TP-Link Unified and EOOEIES Cloud can configure this add-on automatically through the Supervisor API.
 
-## TP-Link/Tapo camera options
+## Normal configuration path
+
+You usually do **not** need to edit the YAML below. Install and start the add-on, then add cameras in the integration UI:
+
+- **TP-Link Unified** writes TP-Link/Tapo `cameras` options.
+- **EOOEIES Cloud** writes EOOEIES `eooeies_cameras` options.
+
+The manual options are documented only for diagnostics and advanced setups.
+
+## Advanced/manual TP-Link/Tapo camera options
 
 Use `username: admin`. If the Tapo app does not show a separate Camera Account page, use the same Tapo/TP-Link password used in TP-Link Unified. If your camera/app exposes a separate Camera Account/RTSP/ONVIF password, use that camera-specific password instead.
 
@@ -36,7 +44,7 @@ cameras:
 
 The add-on generates the SHA-256 password hash required by go2rtc and does not print source URLs in logs.
 
-## EOOEIES camera options
+## Advanced/manual EOOEIES camera options
 
 EOOEIES support is intended to be configured automatically by the EOOEIES Home Assistant integration. Manual options are available for diagnostics or advanced setups:
 

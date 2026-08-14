@@ -11,9 +11,20 @@ Many Tapo battery/solar cameras and doorbells do not expose normal RTSP on port 
 - RTSP for Home Assistant's `stream` integration.
 - JPEG frames for snapshots.
 - WebRTC support where clients use it.
-- Audio when the camera stream exposes it.
+- Audio for camera backends that expose an audio track, for example supported TP-Link/Tapo streams.
 
-## TP-Link/Tapo options
+## Configuration
+
+For normal users, camera setup should happen in the compatible Home Assistant integration, not by hand in this add-on:
+
+- **TP-Link Unified** adds/updates TP-Link/Tapo streams.
+- **EOOEIES Cloud** adds/updates EOOEIES streams.
+
+Install and start this add-on once, then configure cameras in the integration UI.
+
+## Advanced/manual TP-Link/Tapo options
+
+Use this only for diagnostics or if you are not using the TP-Link Unified integration to configure the add-on automatically.
 
 ```yaml
 log_level: info
@@ -30,9 +41,9 @@ If your Tapo app does expose a separate **Camera Account / RTSP / ONVIF** passwo
 
 The add-on automatically hashes the password as required by go2rtc's Tapo source URL. The generated URL is not printed in logs.
 
-## EOOEIES options
+## Advanced/manual EOOEIES options
 
-EOOEIES cameras are normally added automatically by the EOOEIES integration. Advanced users can provide raw-H264 bridge sources manually:
+EOOEIES cameras are normally added automatically by the EOOEIES integration. Advanced users can provide raw-H264 bridge sources manually for diagnostics:
 
 ```yaml
 log_level: info
